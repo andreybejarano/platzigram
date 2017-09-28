@@ -29,6 +29,7 @@
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
+    "platzigram-client": "git+https://github.com/andreybejarano/platzigram-client.git",
     "pug": "^2.0.0-alpha6",
     "superagent": "^1.8.3",
     "title": "^1.0.0",
@@ -49,6 +50,6 @@
   },
   "scripts": {
     "build": "gulp",
-    "start": "gulp watch & node server.js"
+    "start": "node server.js & gulp watch"
   }
 }

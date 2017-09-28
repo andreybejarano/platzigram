@@ -7,8 +7,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
 var passport = require('passport');
+var platzigramClient = require('platzigram-client');
 var config = require('./config');
 var port = process.env.PORT || 3000;
+
+var client = platzigramClient.createClient(config.client);
 
 var s3 = new aws.S3({
 	accessKeyId: config.aws.accessKey,
@@ -17,7 +20,7 @@ var s3 = new aws.S3({
 
 var storage = multerS3({
 	s3: s3,
-	bucket: 'platzigram-curso-andrey',
+	bucket: 'platzigram-curso-erik',
 	acl: 'public-read',
 	metadata: function (req, file, cb) {
 		cb(null, { fieldName: file.fieldname });
@@ -52,6 +55,17 @@ app.get('/', function (req, res) {
 
 app.get('/signup', function (req, res) {
 	res.render('index', { title: 'Platzigram - Signup' });
+});
+
+app.post('/signup', function (req, res) {
+	var user = req.body;
+	client.saveUser(user)
+		.then(function () {
+			res.redirect('/signin');
+		})
+		.catch(function (err) {
+			res.status(500).send(err.message);
+		});
 });
 
 app.get('/signin', function (req, res) {
